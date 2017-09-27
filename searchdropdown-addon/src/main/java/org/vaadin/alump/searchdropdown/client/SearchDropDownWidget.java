@@ -29,6 +29,8 @@ import com.vaadin.client.ui.SubPartAware;
 import com.vaadin.client.ui.VOverlay;
 import com.vaadin.client.ui.menubar.MenuBar;
 import com.vaadin.client.ui.menubar.MenuItem;
+import com.vaadin.event.FieldEvents;
+import com.vaadin.shared.communication.FieldRpc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,6 +50,7 @@ public class SearchDropDownWidget extends Composite implements Focusable {
     private boolean enabled = true;
     private boolean readonly = false;
     private boolean showClear = true;
+    private FieldRpc.FocusAndBlurServerRpc focusBlurListener;
     private SuggestionProvider suggestionProvider;
     private List<SelectionSelectionListener> selectionListeners = new ArrayList<>();
 
@@ -122,6 +125,10 @@ public class SearchDropDownWidget extends Composite implements Focusable {
         selectionListeners.remove(listener);
     }
 
+    public void setFocusBlurListener(FieldRpc.FocusAndBlurServerRpc focusBlurListener) {
+        this.focusBlurListener = focusBlurListener;
+    }
+
     public void setSuggestionProvider(SuggestionProvider provider) {
         suggestionProvider = provider;
     }
@@ -137,10 +144,16 @@ public class SearchDropDownWidget extends Composite implements Focusable {
     private void onBlur(BlurEvent event) {
         removeStyleName("on-focus");
         checkClearVisibility(textField.getValue());
+        if(focusBlurListener != null) {
+            focusBlurListener.blur();
+        }
     }
 
     private void onFocus(FocusEvent event) {
         addStyleName("on-focus");
+        if(focusBlurListener != null) {
+            focusBlurListener.focus();
+        }
     }
 
     private void onKeyUp(KeyUpEvent event) {

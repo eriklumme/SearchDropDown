@@ -17,6 +17,7 @@
  */
 package org.vaadin.alump.searchdropdown;
 
+import com.vaadin.event.FieldEvents;
 import com.vaadin.event.MouseEvents;
 import com.vaadin.shared.EventId;
 import com.vaadin.shared.MouseEventDetails;
@@ -37,7 +38,8 @@ import java.util.logging.Logger;
  * Search drop down field
  * @param <T> Type of suggestion values
  */
-public class SearchDropDown<T> extends AbstractField<String> implements SearchSuggestionPresenter<T>, HasValueChangeMode {
+public class SearchDropDown<T> extends AbstractField<String> implements SearchSuggestionPresenter<T>,
+        HasValueChangeMode, FieldEvents.BlurNotifier, FieldEvents.FocusNotifier {
 
     private SearchSuggestionProvider<T> suggestionProvider;
     private List<SearchListener<T>> searchListeners = new ArrayList<>();
@@ -90,6 +92,16 @@ public class SearchDropDown<T> extends AbstractField<String> implements SearchSu
                 SearchEvent<T> event = new SearchEvent<T>(SearchDropDown.this, text, true);
                 searchListeners.forEach(l -> l.search(event));
             }
+        }
+
+        @Override
+        public void focus() {
+            fireEvent(new FieldEvents.FocusEvent(SearchDropDown.this));
+        }
+
+        @Override
+        public void blur() {
+            fireEvent(new FieldEvents.BlurEvent(SearchDropDown.this));
         }
     };
 
@@ -299,5 +311,17 @@ public class SearchDropDown<T> extends AbstractField<String> implements SearchSu
     public void removeClickListener(MouseEvents.ClickListener listener) {
         removeListener(EventId.CLICK_EVENT_IDENTIFIER, MouseEvents.ClickEvent.class,
                 listener);
+    }
+
+    @Override
+    public Registration addBlurListener(FieldEvents.BlurListener listener) {
+        return addListener(FieldEvents.BlurEvent.EVENT_ID, FieldEvents.BlurEvent.class, listener,
+                FieldEvents.BlurListener.blurMethod);
+    }
+
+    @Override
+    public Registration addFocusListener(FieldEvents.FocusListener listener) {
+        return addListener(FieldEvents.FocusEvent.EVENT_ID, FieldEvents.FocusEvent.class, listener,
+                FieldEvents.FocusListener.focusMethod);
     }
 }

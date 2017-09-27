@@ -96,6 +96,7 @@ public class SearchDropDownConnector extends AbstractComponentConnector implemen
 
         getWidget().setSuggestionProvider(this::provideSuggestions);
         getWidget().addSuggestionSelectionListener(this::onSelection);
+        getWidget().setFocusBlurListener(getRpcProxy(SearchDropDownServerRpc.class));
     }
 
     private void onSelection(Integer suggestionId, String text) {
