@@ -37,7 +37,7 @@ import java.util.List;
 /**
  * GWT widget implementing search field
  */
-public class SearchDropDownWidget extends Composite {
+public class SearchDropDownWidget extends Composite implements Focusable {
 
     private final FlowPanel panel = new FlowPanel();
 
@@ -417,4 +417,23 @@ public class SearchDropDownWidget extends Composite {
         return iconElement == Element.as(event.getEventTarget());
     }
 
+    @Override
+    public int getTabIndex() {
+        return textField.getTabIndex();
+    }
+
+    @Override
+    public void setAccessKey(char c) {
+        textField.setAccessKey(c);
+    }
+
+    @Override
+    public void setFocus(boolean b) {
+        textField.setFocus(b);
+    }
+
+    @Override
+    public void setTabIndex(int i) {
+        textField.setTabIndex(i);
+    }
 }
