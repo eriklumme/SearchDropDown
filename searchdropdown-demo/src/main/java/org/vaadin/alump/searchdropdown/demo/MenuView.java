@@ -30,7 +30,7 @@ public class MenuView extends VerticalLayout implements View {
         addComponent(new Button("Example View", e -> navigator.navigateTo(ExampleView.VIEW_NAME)));
         addComponent(new Button("Simple Example View", e -> navigator.navigateTo(SimpleView.VIEW_NAME)));
         addComponent(new Button("Testing View", e -> navigator.navigateTo(TestView.VIEW_NAME)));
-
+        addComponent(new Button( "Focus and blur view", e -> navigator.navigateTo(FocusBlurView.VIEW_NAME)));
         addComponent(new GitHubLink());
 
     }
